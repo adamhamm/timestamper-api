@@ -7,6 +7,7 @@
 
 var fs = require('fs');
 var express = require('express');
+var moment = require('moment');
 var app = express();
 
 if (!process.env.DISABLE_XORIGIN) {
@@ -35,9 +36,12 @@ app.route('/_api/package.json')
 
 app.route('/:time')
   .all(function(req, res) {
-    var time = new Date(req.params.time);
-    if (time) {
-      res.send({"unix": time.UTC(), "natural": time.toString()});
+    var time = moment(req.params.time);
+    var timeUnix = moment.unix(req.params.time);
+    if (time.isValid()) {
+      res.send({"unix": time.format("X"), "natural": time.format("MMMM DD, YYYY")});
+    } else if (timeUnix.isValid()) {
+      res.send({"unix": timeUnix.format("X"), "natural": timeUnix.format("MMMM DD, YYYY")});
     } else {res.send({"unix": null, "natural": null});}
   });
 
