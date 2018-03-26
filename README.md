@@ -1,2 +1,1 @@
-# timestamper-api
-timestamper
+# Backend Challenges boilerplate - package.json
